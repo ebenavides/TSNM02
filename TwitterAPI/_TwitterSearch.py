@@ -1,8 +1,14 @@
 from TwitterSearch import *
+import time
 
+def my_callback_closure(current_ts_instance): 
+    queries, tweets_seen = current_ts_instance.get_statistics()
+    if queries > 0 and (queries % 5) == 0: 
+        time.sleep(60)
+        
 try:
     tso = TwitterSearchOrder() 
-    tso.set_keywords(['PelonArmy', 'LeagueOfLegends', 'Lindsan']) 
+    tso.set_keywords(['Keylor Navas']) 
     tso.set_language('es') 
     tso.set_include_entities(False) 
 
@@ -14,9 +20,8 @@ try:
         access_token_secret = '5bO2B8PsxiPiQeGaUL0ESGoZSCTMa4n2tvNkaZ39J1tYZ'
      )
 
-
-    for tweet in ts.search_tweets_iterable(tso):
-        print( '@%s tweeted: %s' % ( tweet['user']['screen_name'], tweet['text'] ) )
+    for tweet in ts.search_tweets_iterable(tso, callback=my_callback_closure):
+        print( '@%s tweeted: %s' % ( tweet['user']['screen_name'].encode("utf-8", errors='ignore'), tweet['text'].encode("utf-8", errors='ignore') ) )
 
 except TwitterSearchException as e: 
     print(e)
