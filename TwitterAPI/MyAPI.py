@@ -7,3 +7,4 @@ _request = twitter_api.request('search/tweets', {'q':'PelonArmy'})
 
 for tweet in _request:
         print(tweet['user']['screen_name'],tweet['text'])
+
