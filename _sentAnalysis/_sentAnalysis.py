@@ -5,6 +5,10 @@ try:
     import urllib.request as urllib2
 except ImportError:
     import urllib2
+
+
+url = 'http://text-processing.com/api/sentiment/'
+
     
 def filter_words(tweets_list):
     res=[]
@@ -24,23 +28,27 @@ def get_word_features(wordlist):
     word_features = wordlist.keys()
     return word_features
 
+def send_request(tweet):
+    value = {'text' : tweet}
+    data = urllib.parse.urlencode(value).encode('utf-8')
+    req = urllib.request.Request(url, data)
+    response = urllib.request.urlopen(req)
+    the_page = response.read()
+    print(the_page)
+    
+
 tweets = ['I love this car','This view is amazing','I am so excited about the concert','This view is amazing','He is my best friend',
           'I do not like this car','This view is horrible','I feel tired this morning','I am not looking forward to the concert','He is my enemy']
 
 
-print(filter_words(tweets))
+for i in tweets:
+    send_request(i)
 
 
 
-url = 'http://text-processing.com/api/sentiment/'
-values = {'text' : 'Michael Foord'}
 
-data = urllib.parse.urlencode(values)
-binary_data = data.encode('utf-8')
-req = urllib2.Request(url, binary_data)
-response = urllib2.urlopen(req)
-the_page = response.read()
-print(the_page)
+
+#print(filter_words(tweets))
 
 #word_features = get_word_features(get_words_in_tweets(tweets))
 
