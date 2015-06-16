@@ -1,14 +1,8 @@
 import nltk
 import urllib
 
-try:
-    import urllib.request as urllib2
-except ImportError:
-    import urllib2
-
 
 url = 'http://text-processing.com/api/sentiment/'
-
     
 def filter_words(tweets_list):
     res=[]
@@ -43,10 +37,6 @@ tweets = ['I love this car','This view is amazing','I am so excited about the co
 
 for i in tweets:
     send_request(i)
-
-
-
-
 
 #print(filter_words(tweets))
 
