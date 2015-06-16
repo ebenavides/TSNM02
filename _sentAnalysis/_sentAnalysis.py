@@ -2,12 +2,20 @@ import nltk
 import urllib
 from TwitterSearch import *
 import time
-
+import csv
+import sys
 
 url = 'http://text-processing.com/api/sentiment/'
+pos=0
+neg=0
+neut=0
 
 k=0
 while(k<2):
+    pos=0
+    neg=0
+    neut=0
+    
     c=0
     lan=input("Language: ")
     tags=input("Tag: ")
@@ -56,12 +64,38 @@ while(k<2):
         response = urllib.request.urlopen(req)
         the_page = response.read()
         sample=the_page.decode('utf-8')
+        clean_sample(sample.split(r'"label": "'))
         file2.write(sample+"\n")
         print(the_page)
 
+
+    def clean_sample(smpl):
+        if(smpl[1]==r'pos"}'):
+            global pos
+            pos+=1
+        if(smpl[1]==r'neutral"}'):
+            global neut
+            neut+=1
+        if(smpl[1]==r'neg"}'):
+            global neg
+            neg+=1
+
+    def write_csv(path):
+            csv_file=open(path, 'w', newline='')
+            writer = csv.writer(csv_file,delimiter=',') 
+            writer.writerow( ('Positivo', 'Neutral', 'Negativo'))
+            writer.writerow( (pos, neut, neg) )
+            csv_file.close()
+
+
+
     for i in tweets:
         send_request(i)
-    
+
+    write_csv("output.csv")
+    print(pos)
+    print(neg)
+    print(neut)
     k+=1
 
 
